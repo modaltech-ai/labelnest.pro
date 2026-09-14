@@ -12,6 +12,9 @@
 
 declare(strict_types=1);
 
+define('LABELNEST_INTERNAL', true);
+require __DIR__ . '/_smtp.php';
+
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 header('Cache-Control: no-store');
@@ -114,30 +117,52 @@ if ($written === false) {
 // already safely on disk. But it must never fail *silently*. Every early
 // notification bounced ("User doesn't exist") and nothing recorded it, because
 // this call used to discard its return value.
-$sent = @mail(
-    NOTIFY_TO,
-    'Labelnest waitlist: ' . $email,
-    "Email:  {$email}\n"
-        . 'Label:  ' . ($label !== '' ? $label : '—') . "\n"
-        . "Source: {$source}\n"
-        . "When:   {$record['at']}\n",
-    implode("\r\n", [
-        'From: Labelnest <' . NOTIFY_TO . '>',
-        'Reply-To: ' . $email,
-        'Content-Type: text/plain; charset=utf-8',
-    ]),
-    // Envelope sender, so bounces come back to us and SPF has a domain to check.
-    '-f ' . NOTIFY_TO
-);
+$subject = 'Labelnest waitlist: ' . $email;
+$bodyText = "Email:  {$email}\n"
+    . 'Label:  ' . ($label !== '' ? $label : '—') . "\n"
+    . "Source: {$source}\n"
+    . "When:   {$record['at']}\n";
 
+$sent = false;
+$how = '';
+$err = '';
+
+// Preferred: authenticated SMTP as the mailbox, so SPF and DKIM line up with
+// the From address and the message reaches the inbox rather than spam.
+$cfg = smtp_config($dir);
+if ($cfg !== null) {
+    $how = 'smtp';
+    $sent = smtp_send($cfg, NOTIFY_TO, $subject, $bodyText, $email, $err);
+}
+
+// Fallback: PHP mail(). Delivers, but the web server cannot sign for this
+// domain, so the message is likely to be filed as spam.
 if (!$sent) {
-    // The signup is already saved; record that nobody was told about it.
+    $how = $how === 'smtp' ? 'smtp-failed/mail' : 'mail';
+    $sent = @mail(
+        NOTIFY_TO,
+        $subject,
+        $bodyText,
+        implode("\r\n", [
+            'From: Labelnest <' . NOTIFY_TO . '>',
+            'Reply-To: ' . $email,
+            'Content-Type: text/plain; charset=utf-8',
+        ])
+    );
+}
+
+if (!$sent || $how !== 'smtp') {
+    // Either nobody was told, or they were told over the channel that lands in
+    // spam. Both are worth knowing about without reading the mail logs.
     @file_put_contents(
         $dir . '/notify-failures.log',
-        gmdate('c') . "\thanded to MTA: no\t{$email}\n",
+        gmdate('c') . "\t{$how}\t" . ($sent ? 'accepted' : 'NOT SENT')
+            . "\t{$email}\t{$err}\n",
         FILE_APPEND | LOCK_EX
     );
-    error_log('waitlist: mail() refused the message for ' . $email);
+    if (!$sent) {
+        error_log('waitlist: could not send notification for ' . $email . ' — ' . $err);
+    }
 }
 
 echo json_encode(['ok' => true]);

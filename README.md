@@ -97,6 +97,34 @@ attempted, and the endpoint returns 500 if that write fails, so any 200 means
 the record is safe. A notification that could not be handed to the mail server
 is appended to `notify-failures.log` beside `signups.jsonl`.
 
+### Why SMTP, not mail()
+
+PHP's `mail()` sends from the **web** server (`srv2057.main-hosting.eu`). This
+domain's SPF authorises Hostinger's **mail** service instead, and the web server
+cannot DKIM-sign for the domain, so DMARC alignment fails and the notification
+is filed as spam. Hostinger forces the envelope sender, so `mail()`'s `-f`
+parameter does not help.
+
+The endpoint therefore sends through authenticated SMTP as the mailbox, which
+makes the envelope sender `hello@labelnest.pro`, passes SPF and gets DKIM-signed.
+
+**One-time setup.** Credentials are deliberately not in this repo. Create this
+file on the server, beside `signups.jsonl` and outside the document root:
+
+```
+~/domains/labelnest.pro/waitlist-data/smtp.ini
+```
+
+```ini
+host = smtp.hostinger.com
+port = 465
+user = hello@labelnest.pro
+pass = <the mailbox password>
+```
+
+Until it exists the endpoint falls back to `mail()` and records
+`mail` in `notify-failures.log`, so notifications still arrive — just in spam.
+
 Check delivery in hPanel under Emails → Deliverability, or via the API's inbound
 logs for the mail order.
 
