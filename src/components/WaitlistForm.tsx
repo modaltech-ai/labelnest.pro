@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { CONTACT_EMAIL, WAITLIST_ENDPOINT } from '../content/site'
 
-type Status = 'idle' | 'sending' | 'done' | 'no-endpoint' | 'error'
+type Status = 'idle' | 'sending' | 'done' | 'error'
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
 
@@ -17,6 +17,7 @@ export default function WaitlistForm({
   const [trap, setTrap] = useState('')
   const [status, setStatus] = useState<Status>('idle')
   const [invalid, setInvalid] = useState(false)
+  const [serverMsg, setServerMsg] = useState('')
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
@@ -28,22 +29,23 @@ export default function WaitlistForm({
     }
     setInvalid(false)
 
-    // No endpoint configured yet. Say so, and hand over to mail — never
-    // pretend a signup was recorded.
-    if (!WAITLIST_ENDPOINT) {
-      setStatus('no-endpoint')
-      return
-    }
-
     setStatus('sending')
     try {
       const res = await fetch(WAITLIST_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ email, label, source }),
+        body: JSON.stringify({ email, label, source, company: trap }),
       })
-      setStatus(res.ok ? 'done' : 'error')
+      if (res.ok) {
+        setStatus('done')
+        return
+      }
+      // Prefer the endpoint's own wording — it knows why it said no.
+      const detail = await res.json().catch(() => null)
+      setServerMsg(typeof detail?.error === 'string' ? detail.error : '')
+      setStatus('error')
     } catch {
+      setServerMsg('')
       setStatus('error')
     }
   }
@@ -124,21 +126,12 @@ export default function WaitlistForm({
           </p>
         )}
         {status === 'error' && (
-          <p className="mt-2 max-w-[44ch] text-sm font-medium text-flag">
-            That didn&rsquo;t send. Try again, or email us at{' '}
-            <a className="underline" href={mailto}>
-              {CONTACT_EMAIL}
+          <p className="mt-2 max-w-[46ch] text-sm font-medium text-flag">
+            {serverMsg || 'That didn\u2019t send.'} Try again, or{' '}
+            <a className="underline underline-offset-2" href={mailto}>
+              email us at {CONTACT_EMAIL}
             </a>
             .
-          </p>
-        )}
-        {status === 'no-endpoint' && (
-          <p className="mt-2 max-w-[46ch] text-sm font-medium">
-            The signup form isn&rsquo;t connected yet.{' '}
-            <a className="text-spot underline underline-offset-2" href={mailto}>
-              Send us an email instead
-            </a>{' '}
-            and you&rsquo;ll go on the same list.
           </p>
         )}
       </div>
