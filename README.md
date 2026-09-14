@@ -82,11 +82,27 @@ cat ~/domains/labelnest.pro/waitlist-data/signups.jsonl
 To post somewhere else instead (Formspree, Buttondown, a Worker), set
 `VITE_WAITLIST_ENDPOINT` — no component changes needed.
 
+### Notifications
+
+Each signup emails `hello@labelnest.pro`. **That has to be a real mailbox, not
+just a mail service** — creating the email *order* in hPanel does not create the
+mailbox, and mail to an address with no mailbox is rejected outright:
+
+```
+550 5.1.1 <hello@labelnest.pro> User doesn't exist
+```
+
+Signups are never lost to this — they are written to disk before the email is
+attempted, and the endpoint returns 500 if that write fails, so any 200 means
+the record is safe. A notification that could not be handed to the mail server
+is appended to `notify-failures.log` beside `signups.jsonl`.
+
+Check delivery in hPanel under Emails → Deliverability, or via the API's inbound
+logs for the mail order.
+
 ## Before launch
 
-- [ ] Create the `hello@labelnest.pro` mailbox — the footer links to it, the
-      form falls back to it, and `waitlist.php` sends notifications there.
-      Until it exists those notification emails go nowhere.
+- [x] ~~Create the `hello@labelnest.pro` mailbox~~ — created 14 Sep 2026
 - [x] ~~Waitlist endpoint~~ — live at `/api/waitlist.php`
 - [x] ~~OG image~~ — `public/og-image.png`, 1200x630
 - [x] ~~Apex domain~~ — handled by Hostinger, both apex and `www` serve 200
