@@ -1,19 +1,21 @@
 import { PIPELINE_STAGES } from '../content/pipeline'
+import { useVoice } from '../voice'
 
 /** Stages 1–6 are ticked in the illustration so the rail reads as a real
  *  release mid-flight rather than an empty diagram. */
 const DONE_THROUGH = 6
 
 export default function Pipeline() {
+  const { voice } = useVoice()
   return (
     <section id="pipeline" className="band">
       <div className="shell">
         <div className="max-w-[46rem]">
           <h2 className="t-h2">Eleven stages from demo to post-mortem.</h2>
           <p className="t-lead mt-5 max-w-none">
-            Every release carries the same checklist, timestamped as you tick it. You
-            can see at a glance which of your next six releases is waiting on artwork,
-            and which is waiting on you.
+            {voice === 'plain'
+              ? 'Every release runs through the same checklist, and each step is dated as you tick it off. One glance tells you which release is stuck waiting on artwork, and which one is waiting on you.'
+              : 'Every release carries the same checklist, timestamped as you tick it. You can see at a glance which of your next six releases is waiting on artwork, and which is waiting on you.'}
           </p>
         </div>
 

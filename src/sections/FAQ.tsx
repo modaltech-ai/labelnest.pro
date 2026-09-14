@@ -1,6 +1,8 @@
 import { FAQS } from '../content/faq'
+import { usePick } from '../voice'
 
 export default function FAQ() {
+  const pick = usePick()
   return (
     <section className="band">
       <div className="shell grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
@@ -10,9 +12,9 @@ export default function FAQ() {
 
         <div className="divide-y divide-[var(--color-edge)] border-y border-edge">
           {FAQS.map((f) => (
-            <details key={f.q} className="group">
+            <details key={f.q.tech} className="group">
               <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-5 text-[1.05rem] font-semibold tracking-[-0.015em] marker:content-none">
-                {f.q}
+                {pick(f.q)}
                 <span
                   aria-hidden="true"
                   className="mt-[0.4rem] grid h-5 w-5 shrink-0 place-items-center rounded-full border border-edge text-fg-soft transition-transform duration-200 group-open:rotate-45"
@@ -22,7 +24,7 @@ export default function FAQ() {
                   </svg>
                 </span>
               </summary>
-              <p className="muted -mt-1 max-w-[62ch] pb-5 text-[0.95rem]">{f.a}</p>
+              <p className="muted -mt-1 max-w-[62ch] pb-5 text-[0.95rem]">{pick(f.a)}</p>
             </details>
           ))}
         </div>

@@ -1,5 +1,6 @@
 import { NAV } from '../content/site'
 import Wordmark from './Wordmark'
+import GeekToggle from './GeekToggle'
 
 export default function Nav() {
   return (
@@ -21,9 +22,12 @@ export default function Nav() {
           ))}
         </nav>
 
-        <a href="#access" className="btn px-5 py-2.5 text-sm">
-          Join the waitlist
-        </a>
+        <div className="flex items-center gap-2">
+          <GeekToggle />
+          <a href="#access" className="btn px-5 py-2.5 text-sm">
+            Join the waitlist
+          </a>
+        </div>
       </div>
     </header>
   )

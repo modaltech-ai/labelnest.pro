@@ -38,10 +38,17 @@ Copy `.env.example` to `.env`:
 | File | What's in it |
 |---|---|
 | `COPY.md` | **Every word on the page**, in prose. Start here. |
+| `VOICE.md` | The two registers — plain English and Geek view — and how to add copy to both. |
 | `CLAIMS.md` | **What the page is allowed to say**, with citations into the product repo. Read before changing any factual claim. |
 | `src/content/*` | Structured content — modules, pipeline stages, roadmap, FAQ. |
 | `src/sections/*` | One component per page section. |
 | `src/index.css` | Design tokens and shared component classes. |
+
+### Two registers
+
+The page reads in plain English by default; the glasses button (*Geek view*)
+swaps in the technical wording, and the choice is remembered. Both must state
+the same facts — see `VOICE.md`.
 
 ### The one rule
 

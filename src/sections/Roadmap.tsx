@@ -1,15 +1,18 @@
 import { BUILDING, SHIPPED } from '../content/roadmap'
+import { usePick, useVoice } from '../voice'
 
 export default function Roadmap() {
+  const pick = usePick()
+  const { voice } = useVoice()
   return (
     <section id="roadmap" className="band">
       <div className="shell">
         <div className="max-w-[46rem]">
           <h2 className="t-h2">Where it is, honestly.</h2>
           <p className="t-lead mt-5 max-w-none">
-            The label modules are built and in daily use. The parts that turn one
-            label&rsquo;s back office into a product you can sign up for are still
-            landing — which is why this is a waitlist and not a checkout.
+            {voice === 'plain'
+              ? 'Everything a label needs day to day is built and in use right now. What is still coming is the part that lets you sign yourself up and pay — which is why this is a waitlist and not a checkout.'
+              : 'The label modules are built and in daily use. The parts that turn one label\u2019s back office into a product you can sign up for are still landing — which is why this is a waitlist and not a checkout.'}
           </p>
         </div>
 
@@ -20,7 +23,7 @@ export default function Roadmap() {
               <h3 className="t-h3">Shipped and in daily use</h3>
             </div>
             <ul className="mt-6 grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
-              {SHIPPED.map((s) => (
+              {pick(SHIPPED).map((s) => (
                 <li key={s} className="text-[0.95rem] text-fg-soft">
                   {s}
                 </li>
@@ -34,7 +37,7 @@ export default function Roadmap() {
               <h3 className="t-h3">Building now</h3>
             </div>
             <ul className="mt-6 grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
-              {BUILDING.map((b) => (
+              {pick(BUILDING).map((b) => (
                 <li key={b} className="text-[0.95rem] text-fg-soft">
                   {b}
                 </li>

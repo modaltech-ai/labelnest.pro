@@ -1,3 +1,4 @@
+import { VoiceProvider } from './voice'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
 import Hero from './sections/Hero'
@@ -16,7 +17,7 @@ import CTA from './sections/CTA'
 
 export default function App() {
   return (
-    <>
+    <VoiceProvider>
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-[100] focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-white"
@@ -40,6 +41,6 @@ export default function App() {
         <CTA />
       </main>
       <Footer />
-    </>
+    </VoiceProvider>
   )
 }
