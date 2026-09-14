@@ -8,6 +8,7 @@ export default function Roadmap() {
     <section id="roadmap" className="band">
       <div className="shell">
         <div className="max-w-[46rem]">
+          <p className="eyebrow mb-3">Status</p>
           <h2 className="t-h2">Where it is, honestly.</h2>
           <p className="t-lead mt-5 max-w-none">
             {voice === 'plain'
@@ -18,13 +19,14 @@ export default function Roadmap() {
 
         <div className="mt-14 grid gap-4 lg:grid-cols-2">
           <div className="card p-8">
-            <div className="flex items-center gap-3">
-              <span aria-hidden="true" className="h-2 w-2 rounded-full bg-accent" />
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="stat stat-live">Live</span>
               <h3 className="t-h3">Shipped and in daily use</h3>
             </div>
             <ul className="mt-6 grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
               {pick(SHIPPED).map((s) => (
-                <li key={s} className="text-[0.95rem] text-fg-soft">
+                <li key={s} className="flex gap-2.5 text-[0.95rem] text-fg-soft">
+                  <span aria-hidden="true" className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
                   {s}
                 </li>
               ))}
@@ -32,13 +34,14 @@ export default function Roadmap() {
           </div>
 
           <div className="card p-8">
-            <div className="flex items-center gap-3">
-              <span aria-hidden="true" className="h-2 w-2 rounded-full bg-flag" />
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="stat stat-soon">Building</span>
               <h3 className="t-h3">Building now</h3>
             </div>
             <ul className="mt-6 grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
               {pick(BUILDING).map((b) => (
-                <li key={b} className="text-[0.95rem] text-fg-soft">
+                <li key={b} className="flex gap-2.5 text-[0.95rem] text-fg-soft">
+                  <span aria-hidden="true" className="mt-2 h-1 w-1 shrink-0 rounded-full bg-flag" />
                   {b}
                 </li>
               ))}

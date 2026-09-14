@@ -14,6 +14,7 @@ export default function Security() {
     <section id="security" className="band bg-void">
       <div className="shell">
         <div className="max-w-[46rem]">
+          <p className="eyebrow mb-3">Isolation</p>
           <h2 className="t-h2">
             {voice === 'plain'
               ? 'Your catalogue stays yours alone.'

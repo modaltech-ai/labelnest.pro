@@ -1,5 +1,6 @@
 import CentreLabel from '../components/CentreLabel'
 import { useVoice } from '../voice'
+import { useCountUp } from '../hooks'
 import WaitlistForm from '../components/WaitlistForm'
 
 const FACTS = {
@@ -17,16 +18,25 @@ const FACTS = {
   ],
 }
 
+function Fact({ value, label }: { value: number; suffix?: string; label: string }) {
+  const { ref, n } = useCountUp(value)
+  return (
+    <div ref={ref} className="bg-base px-5 py-6">
+      <span className="block text-3xl font-bold tracking-[-0.04em] text-accent tabular-nums">
+        {n}
+      </span>
+      <span className="muted mt-1 block text-sm">{label}</span>
+    </div>
+  )
+}
+
 export default function Hero() {
   const { voice } = useVoice()
   return (
     <section id="top" className="aura relative isolate overflow-hidden">
       <div className="shell grid items-center gap-14 pt-16 pb-20 lg:grid-cols-[1fr_0.95fr] lg:gap-14 lg:pt-24 lg:pb-28">
         <div>
-          <span className="chip">
-            <span className="h-1.5 w-1.5 rounded-full bg-accent-bright" />
-            Early access, one label at a time
-          </span>
+          <span className="stat stat-live">Early access · one label at a time</span>
 
           <h1 className="t-display t-glow mt-6">
             Your catalogue deserves better than a spreadsheet.
@@ -53,19 +63,11 @@ export default function Hero() {
       </div>
 
       <div className="shell">
-        <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-card)] border border-edge bg-edge md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-card)] border border-edge bg-edge md:grid-cols-4">
           {FACTS[voice].map((f) => (
-            <div key={f.label} className="bg-base px-5 py-6">
-              <dt className="sr-only">{f.label}</dt>
-              <dd>
-                <span className="block text-3xl font-bold tracking-[-0.04em] text-fg">
-                  {f.value}
-                </span>
-                <span className="muted mt-1 block text-sm">{f.label}</span>
-              </dd>
-            </div>
+            <Fact key={f.label} value={Number(f.value)} label={f.label} />
           ))}
-        </dl>
+        </div>
       </div>
     </section>
   )

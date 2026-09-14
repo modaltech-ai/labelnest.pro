@@ -36,6 +36,7 @@ export default function Modules() {
     <section id="product" className="band">
       <div className="shell">
         <div className="max-w-[46rem]">
+          <p className="eyebrow mb-3">The product</p>
           <h2 className="t-h2">One workspace. Twelve places to put things.</h2>
           <p className="t-lead mt-5 max-w-none">
             {voice === 'plain'

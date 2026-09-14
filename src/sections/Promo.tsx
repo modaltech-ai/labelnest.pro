@@ -24,7 +24,8 @@ export default function Promo() {
       <div className="shell">
         <div className="grid gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:items-start lg:gap-16">
           <div>
-            <h2 className="t-h2">Find out who actually played it.</h2>
+            <p className="eyebrow mb-3">Promo</p>
+          <h2 className="t-h2">Find out who actually played it.</h2>
             <p className="t-body mt-5 text-lg">
               Promo is where most label admin quietly falls apart. You send sixty
               packages and get back a mess of replies you can&rsquo;t summarise for
@@ -53,13 +54,14 @@ export default function Promo() {
           </div>
 
           {/* Response view illustration */}
-          <div className="card overflow-hidden">
+          <div className="card bracket relative overflow-hidden">
+            <span className="sweep" style={{ ['--sweep-distance' as string]: '340px' }} />
             <div className="flex items-center justify-between gap-4 border-b border-edge px-6 py-4">
               <div>
                 <p className="text-sm font-semibold">LN-001 — promo response</p>
-                <p className="t-code mt-0.5 text-fg-faint">60 sent · 38 replied</p>
+                <p className="eyebrow mt-1">60 sent · 38 replied</p>
               </div>
-              <span className="chip border-accent/40 text-accent-bright">63% support</span>
+              <span className="stat stat-live">63% support</span>
             </div>
 
             <div className="px-6 pt-5">
