@@ -132,7 +132,7 @@ $err = '';
 $cfg = smtp_config($dir);
 if ($cfg !== null) {
     $how = 'smtp';
-    $sent = smtp_send($cfg, NOTIFY_TO, $subject, $bodyText, $email, $err);
+    $sent = smtp_send($cfg, $cfg['notify'], $subject, $bodyText, $email, $err);
 }
 
 // Fallback: PHP mail(). Delivers, but the web server cannot sign for this

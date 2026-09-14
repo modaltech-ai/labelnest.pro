@@ -68,6 +68,10 @@ if (is_file($ini) && is_readable($ini)) {
 // Does smtp_config() accept it?
 $cfg = smtp_config($dir);
 $out['smtp_config_ok'] = $cfg !== null;
+if ($cfg !== null) {
+    $out['notify_to'] = $cfg['notify'];
+    $out['self_addressed'] = strcasecmp($cfg['notify'], $cfg['user']) === 0;
+}
 
 // Can we actually reach Hostinger SMTP and authenticate?
 if ($cfg !== null) {
@@ -75,7 +79,7 @@ if ($cfg !== null) {
     $t0 = microtime(true);
     $ok = smtp_send(
         $cfg,
-        $cfg['user'],
+        $cfg['notify'],
         'Labelnest SMTP diagnostic',
         "This message confirms the waitlist endpoint can send over authenticated SMTP.\n",
         $cfg['user'],

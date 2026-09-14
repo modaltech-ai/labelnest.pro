@@ -116,11 +116,18 @@ file on the server, beside `signups.jsonl` and outside the document root:
 ```
 
 ```ini
-host = smtp.hostinger.com
-port = 465
-user = hello@labelnest.pro
-pass = <the mailbox password>
+host   = smtp.hostinger.com
+port   = 465
+user   = hello@labelnest.pro
+pass   = <the mailbox password>
+notify = you@example.com        ; optional — where alerts are sent
 ```
+
+`notify` defaults to the mailbox itself. Leave it unset and alerts go from
+`hello@labelnest.pro` to `hello@labelnest.pro` — automated mail from an address
+to that same address, on a young domain, is a well-known spam heuristic, and
+Hostinger filed ours as spam even with SPF and DKIM passing. Pointing `notify`
+at a different inbox avoids the pattern.
 
 Until it exists the endpoint falls back to `mail()` and records
 `mail` in `notify-failures.log`, so notifications still arrive — just in spam.

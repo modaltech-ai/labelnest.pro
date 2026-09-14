@@ -27,10 +27,17 @@ if (!defined('LABELNEST_INTERNAL')) {
  * back to mail() rather than dropping the notification.
  *
  * Expected contents:
- *   host = smtp.hostinger.com
- *   port = 465
- *   user = hello@labelnest.pro
- *   pass = <mailbox password>
+ *   host   = smtp.hostinger.com
+ *   port   = 465
+ *   user   = hello@labelnest.pro
+ *   pass   = <mailbox password>
+ *   notify = you@example.com   ; optional, see below
+ *
+ * `notify` is where signup alerts are sent. It defaults to the mailbox itself,
+ * but mail from an address to that same address, sent automatically, on a
+ * young domain, is a well-known spam heuristic — Hostinger filed ours as spam
+ * even with SPF and DKIM passing. Pointing `notify` at a different inbox avoids
+ * the self-addressed pattern entirely.
  */
 function smtp_config(string $dir): ?array
 {
@@ -42,11 +49,16 @@ function smtp_config(string $dir): ?array
     if (!is_array($cfg) || empty($cfg['user']) || empty($cfg['pass'])) {
         return null;
     }
+    $notify = trim((string) ($cfg['notify'] ?? ''));
     return [
         'host' => (string) ($cfg['host'] ?? 'smtp.hostinger.com'),
         'port' => (int) ($cfg['port'] ?? 465),
         'user' => (string) $cfg['user'],
         'pass' => (string) $cfg['pass'],
+        // Fall back to the mailbox when no separate destination is configured.
+        'notify' => $notify !== '' && filter_var($notify, FILTER_VALIDATE_EMAIL)
+            ? $notify
+            : (string) $cfg['user'],
     ];
 }
 
