@@ -9,13 +9,16 @@ Quest4Goa Records is its first workspace. This repo is only the front door.
 
 Vite 7 · React 19 · TypeScript · Tailwind CSS v4. Static build, no backend.
 
+Deployed on Hostinger from this repo: a push to `main` triggers a build
+(Node 22, `npm run build`, output `dist`).
+
 ## Run it
 
 ```bash
-pnpm install
-pnpm dev        # http://localhost:5173
-pnpm build      # type-check + production build into dist/
-pnpm preview    # serve the built output
+npm install
+npm run dev      # http://localhost:5173
+npm run build    # type-check + production build into dist/
+npm run preview   # serve the built output
 ```
 
 ## Configuration
