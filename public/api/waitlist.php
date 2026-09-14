@@ -111,8 +111,10 @@ if ($written === false) {
 }
 
 // Notification is best effort — a mail failure must not lose a signup that is
-// already safely on disk.
-@mail(
+// already safely on disk. But it must never fail *silently*. Every early
+// notification bounced ("User doesn't exist") and nothing recorded it, because
+// this call used to discard its return value.
+$sent = @mail(
     NOTIFY_TO,
     'Labelnest waitlist: ' . $email,
     "Email:  {$email}\n"
@@ -123,7 +125,19 @@ if ($written === false) {
         'From: Labelnest <' . NOTIFY_TO . '>',
         'Reply-To: ' . $email,
         'Content-Type: text/plain; charset=utf-8',
-    ])
+    ]),
+    // Envelope sender, so bounces come back to us and SPF has a domain to check.
+    '-f ' . NOTIFY_TO
 );
+
+if (!$sent) {
+    // The signup is already saved; record that nobody was told about it.
+    @file_put_contents(
+        $dir . '/notify-failures.log',
+        gmdate('c') . "\thanded to MTA: no\t{$email}\n",
+        FILE_APPEND | LOCK_EX
+    );
+    error_log('waitlist: mail() refused the message for ' . $email);
+}
 
 echo json_encode(['ok' => true]);
