@@ -86,6 +86,25 @@ if ($cfg !== null) {
     $out['smtp_ms'] = (int) ((microtime(true) - $t0) * 1000);
 }
 
+// What channel did recent real signups actually use?
+$logPath = $dir . '/notify-failures.log';
+if (is_file($logPath)) {
+    $lines = @file($logPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [];
+    $out['notify_log_tail'] = array_slice($lines, -8);
+    $out['notify_log_lines'] = count($lines);
+} else {
+    $out['notify_log_tail'] = '(file absent — every notification went out over SMTP)';
+}
+
+// How many signups are recorded, and when was the last one?
+$sig = $dir . '/signups.jsonl';
+if (is_file($sig)) {
+    $rows = @file($sig, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [];
+    $out['signup_count'] = count($rows);
+    $last = json_decode((string) end($rows), true);
+    $out['last_signup_at'] = is_array($last) ? ($last['at'] ?? null) : null;
+}
+
 // Is outbound 465 open from this server at all?
 $probe = @stream_socket_client('ssl://smtp.hostinger.com:465', $n, $e, 10);
 $out['port_465_reachable'] = (bool) $probe;
