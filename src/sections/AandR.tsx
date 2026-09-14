@@ -42,6 +42,7 @@ export default function AandR() {
     <section className="band">
       <div className="shell">
         <div className="max-w-[46rem]">
+          <p className="eyebrow mb-3">A&R</p>
           <h2 className="t-h2">The unglamorous half of running a label.</h2>
           <p className="t-lead mt-5 max-w-none">
             {voice === 'plain'

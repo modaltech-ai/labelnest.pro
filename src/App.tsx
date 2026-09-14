@@ -1,5 +1,6 @@
 import { VoiceProvider } from './voice'
 import Nav from './components/Nav'
+import ScrollProgress from './components/ScrollProgress'
 import Footer from './components/Footer'
 import Hero from './sections/Hero'
 import Origin from './sections/Origin'
@@ -24,6 +25,7 @@ export default function App() {
       >
         Skip to content
       </a>
+      <ScrollProgress />
       <Nav />
       <main id="main">
         <Hero />

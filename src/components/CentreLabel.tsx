@@ -18,7 +18,7 @@ export default function CentreLabel() {
         className="absolute inset-[-16%] rounded-full opacity-70 blur-3xl"
         style={{
           background:
-            'radial-gradient(circle at 50% 45%, rgb(109 92 246 / 0.45) 0%, rgb(109 92 246 / 0.10) 45%, transparent 70%)',
+            'radial-gradient(circle at 50% 45%, rgb(29 228 212 / 0.4) 0%, rgb(29 228 212 / 0.09) 45%, transparent 70%)',
         }}
       />
 
@@ -63,7 +63,7 @@ export default function CentreLabel() {
 
         {/* Paper label */}
         <circle cx="200" cy="200" r="88" fill="url(#paper)" />
-        <circle cx="200" cy="200" r="88" fill="none" stroke="#6d5cf6" strokeWidth="5" />
+        <circle cx="200" cy="200" r="88" fill="none" stroke="#1de4d4" strokeWidth="5" />
       </svg>
 
       {/* Rim small print, revolving with the record. */}
@@ -83,7 +83,7 @@ export default function CentreLabel() {
       <div className="absolute inset-0 grid place-items-center">
         <div className="grid aspect-square w-[44%] place-items-center text-center">
           <div>
-            <p className="t-code leading-none text-accent-deep">LN&#8209;001</p>
+            <p className="t-code leading-none text-[#0b8f88]">LN&#8209;001</p>
             <p
               className="mt-1.5 text-[clamp(0.95rem,2.4vw,1.35rem)] leading-none font-bold tracking-[-0.03em] text-[#0b0d16]"
               style={{ fontVariationSettings: "'wdth' 112" }}

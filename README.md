@@ -44,6 +44,23 @@ Copy `.env.example` to `.env`:
 | `src/sections/*` | One component per page section. |
 | `src/index.css` | Design tokens and shared component classes. |
 
+### Visual signature
+
+The page shares one visual language with the operator console at
+`onboarding.labelnest.pro`: a near-black ground under a faint teal grid, one
+slow aurora above it, and three colours that always mean the same thing —
+
+| Colour | Meaning |
+|---|---|
+| Teal `#1de4d4` | live, shipped, working |
+| Violet `#a072e8` | provisional |
+| Amber `#f0b429` | not built yet |
+
+Shared primitives live in `src/index.css`: `.stat` (status chip), `.eyebrow`
+(monospace section marker), `.bracket` (corner brackets) and `.sweep` (scanning
+beam). Use them rather than re-inventing a one-off; the point is that the
+product and the page selling it read as one system.
+
 ### Two registers
 
 The page reads in plain English by default; the glasses button (*Geek view*)

@@ -11,6 +11,7 @@ export default function Pipeline() {
     <section id="pipeline" className="band">
       <div className="shell">
         <div className="max-w-[46rem]">
+          <p className="eyebrow mb-3">Release pipeline</p>
           <h2 className="t-h2">Eleven stages from demo to post-mortem.</h2>
           <p className="t-lead mt-5 max-w-none">
             {voice === 'plain'
