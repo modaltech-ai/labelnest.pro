@@ -52,11 +52,34 @@ PDF/XLSX export, outbound webhooks, custom fields. **Do not source page copy fro
 those documents.** Every factual statement here is checked against the product's
 actual code, and `CLAIMS.md` records both what is safe to say and what is not.
 
+## Waitlist
+
+`public/api/waitlist.php` is a same-origin endpoint deployed with the site. It
+validates the address, drops honeypot submissions, limits each IP to five
+signups an hour, appends the signup to JSON Lines and emails a notification.
+
+Signups are stored **outside the document root**, at
+
+```
+/home/<user>/domains/labelnest.pro/waitlist-data/signups.jsonl
+```
+
+because the Node build overwrites `public_html` on every deploy — anything kept
+inside it would be wiped, and anything readable in there would be a public list
+of email addresses. Read it over SSH or in hPanel's File Manager:
+
+```bash
+cat ~/domains/labelnest.pro/waitlist-data/signups.jsonl
+```
+
+To post somewhere else instead (Formspree, Buttondown, a Worker), set
+`VITE_WAITLIST_ENDPOINT` — no component changes needed.
+
 ## Before launch
 
-- [ ] Point `VITE_WAITLIST_ENDPOINT` at a real endpoint
-- [ ] Set `VITE_CONTACT_EMAIL` to a mailbox that exists (`hello@labelnest.pro` does not yet)
-- [ ] Add `public/og-image.png` at 1200×630 — referenced by the meta tags, not yet created
-- [ ] Hosting: the `labelnest.pro` apex and `www` are **not** in the product's nginx
-      config, and the wildcard certificate covers `*.labelnest.pro` only. Serving the
-      apex needs both a certificate change and an nginx change.
+- [ ] Create the `hello@labelnest.pro` mailbox — the footer links to it, the
+      form falls back to it, and `waitlist.php` sends notifications there.
+      Until it exists those notification emails go nowhere.
+- [x] ~~Waitlist endpoint~~ — live at `/api/waitlist.php`
+- [x] ~~OG image~~ — `public/og-image.png`, 1200x630
+- [x] ~~Apex domain~~ — handled by Hostinger, both apex and `www` serve 200

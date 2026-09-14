@@ -127,7 +127,7 @@ export default function WaitlistForm({
         )}
         {status === 'error' && (
           <p className="mt-2 max-w-[46ch] text-sm font-medium text-flag">
-            {serverMsg || 'That didn\u2019t send.'} Try again, or{' '}
+            {serverMsg ? `${serverMsg} Or ` : 'That didn\u2019t send. Try again, or '}
             <a className="underline underline-offset-2" href={mailto}>
               email us at {CONTACT_EMAIL}
             </a>
